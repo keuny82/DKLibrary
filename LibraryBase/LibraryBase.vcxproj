@@ -145,6 +145,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="KTime.h" />
     <ClInclude Include="Logger.h" />
+    <ClInclude Include="OptimizedFlippableQueue.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="prerequisite.h" />
     <ClInclude Include="Serializable.h" />
