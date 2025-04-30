@@ -26,6 +26,8 @@ namespace dk
 		bool detachable(size_t size) const;
 		Stream detach();
 		
+	public:
+		enum { DEFAULT_BUF_SIZE = 4096 };
 	private:
 		using StreamQueue = std::deque<Stream>;
 		StreamQueue m_StreamQueue;
