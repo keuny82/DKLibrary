@@ -24,4 +24,11 @@ namespace dk
 	}
 	CLASS_SHARED_PTR(Encoder);
 	
+	struct TCPException : public Exception
+	{
+		explicit TCPException(const std::string& message)
+			: Exception(message)
+		{
+		}
+	};
 }

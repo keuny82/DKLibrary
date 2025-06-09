@@ -4,7 +4,7 @@
 #include "Serializable.h"
 #include <sstream>
 
-#include <flatbuffers.h>
+#include <flatbuffers/flatbuffers.h>
 
 
 namespace dk

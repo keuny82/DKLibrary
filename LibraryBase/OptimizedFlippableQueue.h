@@ -13,7 +13,7 @@ namespace dk
 	public:
 		using Queue = std::deque<T>;
 		OptimizedFlippableQueueT() : m_pos(0) {}
-		OptimizedFlippableQueueT() = default;
+		~OptimizedFlippableQueueT() {}
 
 		Queue& flip()
 		{

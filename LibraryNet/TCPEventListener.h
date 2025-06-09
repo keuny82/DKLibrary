@@ -32,7 +32,7 @@ namespace dk
 		}
 		bool messageHandler(TCPMessageNo messageNo) const
 		{
-			return m_MessageHandler.find(messageNo) != m_MessageHandler.end();
+			return m_MessageHandlers.find(messageNo) != m_MessageHandlers.end();
 		}
 		void handleMessage(TCPSessionPtr session, Stream& stream);
 
@@ -45,7 +45,7 @@ namespace dk
 
 		void addMessageHandler(TCPMessageHandlerPtr handler)
 		{
-			m_MessageHandler[handler->getMessageNo()] = handler;
+			m_MessageHandlers[handler->getMessageNo()] = handler;
 		}
 
 		template<typename TCPMessageT>

@@ -2,6 +2,7 @@
 
 #include "prerequisites.h"
 #include "Stream.h"
+#include "TCPMessage.h"
 #include <optional>
 #include <system_error>
 
@@ -43,11 +44,11 @@ namespace dk
 	class RecvQueue;
 	class TCPSession;
 
-	class Endcoder
+	class Encoder
 	{
 	public:
-		Endcoder() = default;
-		virtual ~Endcoder() = default;
+		Encoder() = default;
+		virtual ~Encoder() = default;
 		virtual void clear() {}
 		virtual void startAccepting() { finishAccepting(); }
 		virtual void startConnecting(const std::error_code& error) { finishConnecting(error); }
@@ -85,7 +86,7 @@ namespace dk
 	};
 
 	template<typename PacketHeaderT>
-	class EncoderT : public Endcoder
+	class EncoderT : public Encoder
 	{
 	protected:
 		EncoderT() = default;
