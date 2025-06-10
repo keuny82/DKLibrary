@@ -37,6 +37,7 @@ namespace dk
 		{
 			return m_time < other.m_time;
 		}
+		// 시간을 문자열로 변환
 		std::string toString() const
 		{
 			std::tm tm = to_tm();
@@ -47,6 +48,7 @@ namespace dk
 
 	private:
 		explicit Time(const std::tm& tm);
+		// 문자열을 std::tm 구조체로 변환
 		static std::tm to_tm(const std::string& timeString)
 		{
 			std::tm tm = {};

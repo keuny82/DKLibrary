@@ -15,18 +15,21 @@ namespace dk
 		OptimizedFlippableQueueT() : m_pos(0) {}
 		~OptimizedFlippableQueueT() {}
 
+		// 큐를 전환 (use lock)
 		Queue& flip()
 		{
 			std::lock_guard<std::mutex> guard(m_lock);
 			return flipWeak();
 		}
 
+		// 큐를 전환
 		Queue& flipWeak()
 		{
 			m_pos.store(!m_pos, std::memory_order_relaxed);
 			return m_queues[!m_pos];
 		}
 
+		// 데이터를 큐에 추가 (use lock)
 		template<typename... TS>
 		void push(TS&&... params)
 		{
@@ -34,6 +37,7 @@ namespace dk
 			pushWeak(std::forward<TS>(params)...);
 		}
 
+		// 데이터를 큐에 추가
 		template<typename... TS>
 		void pushWeak(TS&&... params)
 		{
