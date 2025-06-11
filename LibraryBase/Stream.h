@@ -18,13 +18,15 @@ namespace dk
 	public:
 		Stream() : Stream(0) {}
 		explicit Stream(std::size_t size) : m_buf(new StreamBuf(size)), m_read(0), m_written(0) {}
+		// Copy constructor
 		Stream(const Stream& other) : m_buf(other.m_buf), m_read(other.m_read), m_written(other.m_written) {}
+		// Constructor that initializes the stream with data
 		Stream(const void* data, std::size_t size) : Stream(size) { write(data, size); }
 
 
 		Stream& operator=(const Stream& other)
 		{
-			if (this != &other)
+			if (this != &other)	// 자기 자신이 아닌 경우
 			{
 				m_buf = other.m_buf;
 				m_read = other.m_read;
@@ -54,7 +56,7 @@ namespace dk
 			::memcpy(getWritableBuffer(), data, size);
 			commit(size);
 		}
-
+		// 지정된 크키의 빈 공간 확보
 		void write(std::size_t size)
 		{
 			OStreamVerifier::verify(*this, size);
@@ -64,7 +66,7 @@ namespace dk
 		void read(void* data, std::size_t size)
 		{
 			IStreamVerifier::verify(*this, size);
-			peek(data, size);
+			peek(data, size);	// 데이터를 가져옴 
 			pop(size);
 		}
 
@@ -81,7 +83,7 @@ namespace dk
 
 		std::size_t getReadableSize() const
 		{
-			assert(m_read <= m_written);
+			assert(m_read <= m_written);	// 읽기 위치 체크
 			return m_written - m_read;
 		}
 
@@ -101,16 +103,16 @@ namespace dk
 
 		void consume(std::size_t size)
 		{
-			assert(m_read + size <= m_written);
+			assert(m_read + size <= m_written);	// 읽기 위치 체크
 			m_read += size;
 		}
 
 		void commit(std::size_t size)
 		{
-			assert(m_written + size <= getAllocSize());
+			assert(m_written + size <= getAllocSize());	// 쓰기 위치 체크
 			m_written += size;
 		}
-
+		// 데이터 미리보기
 		void peek(void* data, std::size_t size) const
 		{
 			assert(m_read + size <= m_written);
@@ -136,7 +138,7 @@ namespace dk
 		friend class IStreamVerifier;
 	};
 
-
+	// 기본형들 읽기 쓰기
 	template<typename T, typename = typename std::enable_if<std::is_scalar<T>::value>::type>
 	Stream& operator>>(Stream& stream, T& value)
 	{
@@ -151,6 +153,7 @@ namespace dk
 		return stream;
 	}
 
+	// 문자열 처리
 	inline Stream& operator>>(Stream& stream, std::string& str)
 	{
 		uint32_t len;
@@ -173,6 +176,7 @@ namespace dk
 		return stream;
 	}
 
+	// 사용자 정의 타입 처리
 	inline Stream& operator>>(Stream& stream, Serializable& serializable)
 	{
 		serializable.deserialize(stream);
@@ -185,13 +189,14 @@ namespace dk
 		return stream;
 	}
 
+	// 시퀀스 컨테이너 처리
 	template<typename SeqContainerT>
 	Stream& readSeqContainer(Stream& stream, SeqContainerT& values)
 	{
 		values.clear();
 		uint32_t size = 0;
 		stream >> size;
-		values.resize(std::min<size_t>(size, stream.getReadableSize()));
+		values.resize(std::min<size_t>(size, stream.getReadableSize()));	// 검증후 할당
 		for (auto& value : values)
 		{
 			stream >> value;
@@ -210,6 +215,8 @@ namespace dk
 		return stream;
 	}
 
+
+	// STL 컨테이너 처리
 	template<typename T>
 	Stream& operator>>(Stream& stream, std::vector<T>& values)
 	{

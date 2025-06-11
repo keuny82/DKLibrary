@@ -9,15 +9,14 @@ namespace dk	{
 	template <typename T>
 	class Singleton : private noncopyable
 	{
-	proteted:
+	protected:
 		static T* singleton;
 
 	public:
 		Singleton()
 		{
 			assert(singleton == nullptr);
-			static T* instance = static_cast<T*>(this);
-			singleton = instance;
+			singleton = static_cast<T*>(this);			
 		}
 		~Singleton()
 		{
